@@ -1,0 +1,18 @@
+{
+  "name": "nt-webflow-custom-code",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Custom code development and build tooling for the NT Webflow workspace",
+  "scripts": {
+    "kill": "lsof -ti :3000 -ti :3001 | xargs kill -9 2>/dev/null || true",
+    "dev": "npm run kill && concurrently --kill-others --names http,https \"serve codes --listen 3000 --cors\" \"local-ssl-proxy --source 3001 --target 3000 --cert localhost.pem --key localhost-key.pem\"",
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "devDependencies": {
+    "concurrently": "latest",
+    "esbuild": "latest",
+    "local-ssl-proxy": "latest",
+    "serve": "latest"
+  }
+}
