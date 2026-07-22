@@ -228,7 +228,26 @@ function initSectionHeadReveals() {
   });
 }
 
-function initTextAnimations() {
+async function waitForSplitText() {
+  if (document.fonts?.ready) await document.fonts.ready;
+
+  const splitTargets = [
+    ...document.querySelectorAll(
+      "#home-hero h1, #home-hero h2, [section-head] h2, [section-head-tag] p"
+    )
+  ];
+
+  if (!splitTargets.length) return;
+
+  // SplitText is initialized separately, so wait until its characters exist.
+  for (let frame = 0; frame < 120; frame += 1) {
+    if (splitTargets.every((target) => target.querySelector(".char"))) return;
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+}
+
+async function initTextAnimations() {
+  await waitForSplitText();
   initHomeHeroEntrance();
   initSectionHeadReveals();
 }
