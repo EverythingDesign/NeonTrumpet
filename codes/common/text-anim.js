@@ -1,3 +1,10 @@
+function shouldSkipBlurAnimations() {
+  const userAgent = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
+  return isIOS || isSafari;
+}
+
 function initHomeHeroEntrance() {
   const hero = document.querySelector("#home-hero");
   const navbarComp = document.querySelector(".nav_component");
@@ -7,6 +14,8 @@ function initHomeHeroEntrance() {
   const primary = hero.querySelectorAll("[primary]");
   const secondary = hero.querySelectorAll("[secondary]");
   const tertiary = hero.querySelectorAll("[tertiary]");
+  const skipBlur = shouldSkipBlurAnimations();
+  const blurFrom = skipBlur ? {} : { filter: "blur(10px)" };
 
   function getVisualLines(element) {
     const lineWrappers = [...element.querySelectorAll(".line")];
@@ -40,7 +49,7 @@ function initHomeHeroEntrance() {
   if (!revealTargets.length) return;
 
   gsap.set(revealTargets, {
-    willChange: "opacity, filter"
+    willChange: skipBlur ? "opacity" : "opacity, filter"
   });
   if (navbarComp) {
     gsap.set(navbarComp, { yPercent: -100, willChange: "transform" });
@@ -69,7 +78,7 @@ function initHomeHeroEntrance() {
       line,
       {
         opacity: 0,
-        filter: "blur(10px)",
+        ...blurFrom,
         duration: 1,
         ease: "power2.out"
       },
@@ -86,7 +95,7 @@ function initHomeHeroEntrance() {
       tertiary,
       {
         opacity: 0,
-        filter: "blur(10px)"
+        ...blurFrom
       },
       "tertiaryStart"
     );
@@ -108,6 +117,8 @@ function initSectionHeadReveals() {
   const sectionHeads = gsap.utils.toArray("[section-head]");
   const sectionHeadTags = gsap.utils.toArray("[section-head-tag]");
   const sectionButtons = gsap.utils.toArray("[section-btn]");
+  const skipBlur = shouldSkipBlurAnimations();
+  const blurFrom = skipBlur ? {} : { filter: "blur(10px)" };
   if (!sectionHeads.length && !sectionHeadTags.length && !sectionButtons.length) return;
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -156,7 +167,7 @@ function initSectionHeadReveals() {
           line.targets,
           {
             opacity: 0,
-            filter: "blur(10px)",
+            ...blurFrom,
             duration: 1,
             ease: "power2.out",
             clearProps: "filter,willChange"
@@ -171,7 +182,7 @@ function initSectionHeadReveals() {
         paragraphs,
         {
           opacity: 0,
-          filter: "blur(10px)",
+          ...blurFrom,
           duration: 0.7,
           ease: "power4.out",
           clearProps: "filter,willChange"
@@ -187,7 +198,7 @@ function initSectionHeadReveals() {
 
     gsap.from(chars, {
       opacity: 0,
-      filter: "blur(10px)",
+      ...blurFrom,
       duration: 0.7,
       ease: "power4.out",
       stagger: 0.025,
@@ -204,7 +215,7 @@ function initSectionHeadReveals() {
     gsap.from(button, {
       y: 24,
       opacity: 0,
-      filter: "blur(10px)",
+      ...blurFrom,
       duration: 0.7,
       ease: "power4.out",
       clearProps: "filter,transform,willChange",

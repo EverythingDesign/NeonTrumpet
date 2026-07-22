@@ -1,4 +1,4 @@
-# Kandou Repository Setup & Webflow Integration Guide
+# NeonTrumpet Repository Setup & Webflow Integration Guide
 
 This guide details the step-by-step setup of the Kandou development environment and explains how it integrates with Webflow to support live local development and previewing of custom code.
 
@@ -61,7 +61,7 @@ In the custom code settings of your Webflow pages (specifically in the **Before 
 
 #### Step 4: Preview Live Updates
 1. Make an edit to your code inside the local `codes/` folder and save it.
-2. Open your Webflow staging/preview site (e.g., `kandou-staging.webflow.io`) in your browser.
+2. Open your Webflow staging/preview site (e.g., `neontrumpetxed.webflow.io`) in your browser.
 3. Reload the page. The browser loads the updated local script instantly, allowing you to test modifications in real time.
 
 ---
@@ -75,8 +75,5 @@ When features are ready to go live to all visitors:
     ```
 2.  **Host the Assets**: Push the new changes to your hosting or CDN service (e.g., hosting them on GitHub and using jsDelivr, or hosting on Netlify/AWS S3).
 3.  **Update Webflow Scripts**: Replace the local proxy URLs in Webflow's custom code editor with the production CDN URLs:
-    ```html
-    <!-- Example production script tag using jsDelivr -->
-    <script src="https://cdn.jsdelivr.net/gh/armoredcat/kandou-repo@latest/dist/common/utils.js"></script>
-    ```
+
 4.  **Publish in Webflow**: Click publish to deploy the site with the production scripts.
