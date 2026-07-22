@@ -1,6 +1,7 @@
 function shouldSkipBlurAnimations() {
   const userAgent = navigator.userAgent;
-  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
   return isIOS || isSafari;
 }
@@ -49,7 +50,8 @@ function initHomeHeroEntrance() {
   if (!revealTargets.length) return;
 
   gsap.set(revealTargets, {
-    willChange: skipBlur ? "opacity" : "opacity, filter"
+    willChange: skipBlur ? "opacity" : "opacity, filter",
+    ...(skipBlur ? { filter: "none" } : {})
   });
   if (navbarComp) {
     gsap.set(navbarComp, { yPercent: -100, willChange: "transform" });
@@ -120,6 +122,13 @@ function initSectionHeadReveals() {
   const skipBlur = shouldSkipBlurAnimations();
   const blurFrom = skipBlur ? {} : { filter: "blur(10px)" };
   if (!sectionHeads.length && !sectionHeadTags.length && !sectionButtons.length) return;
+
+  if (skipBlur) {
+    gsap.set(
+      "[section-head] .char, [section-head] p, [section-head-tag] .char, [section-btn]",
+      { filter: "none", willChange: "opacity" }
+    );
+  }
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     gsap.set("[section-head] .char, [section-head] p, [section-head-tag] .char, [section-btn]", {
